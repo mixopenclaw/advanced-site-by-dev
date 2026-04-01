@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "dev": {
+      "cmd": "pnpm dev",
+      "desc": "Run Next.js dev server with HMR",
+      "env": {"NODE_ENV":"development"}
+    },
+    "preview": {
+      "cmd": "pnpm build && pnpm start",
+      "desc": "Build and preview production build locally",
+      "env": {"NODE_ENV":"production"}
+    }
+  }
+}
