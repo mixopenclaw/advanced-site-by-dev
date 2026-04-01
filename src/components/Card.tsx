@@ -1,4 +1,6 @@
 import React from 'react'
-export default function Card({children}:{children:React.ReactNode}){
-  return <div className="p-4 border rounded shadow-sm">{children}</div>
+
+type Props = {children: React.ReactNode, className?: string}
+export default function Card({children,className=''}:Props){
+  return <div className={`bg-white dark:bg-slate-800 p-6 rounded-xl ${className} shadow-card`}>{children}</div>
 }

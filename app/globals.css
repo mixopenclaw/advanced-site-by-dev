@@ -1,26 +1,31 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+:root{
+  --bg:#ffffff;
+  --fg:#0f172a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme='dark']{
+  --bg:#071023;
+  --fg:#e6eef6;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,body,#root{height:100%;}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+.container{max-width:1100px;margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem}
+
+.hero{padding-top:4rem;padding-bottom:4rem}
+
+.card{background:var(--bg);box-shadow:var(--tw-shadow, 0 6px 18px rgba(16,24,40,0.08));border-radius:12px}
+
+.focus-ring:focus{outline:3px solid rgba(59,130,246,0.45);outline-offset:2px}

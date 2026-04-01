@@ -1,5 +1,6 @@
 'use client'
 import React, {useState} from 'react'
+import Button from './Button'
 
 export default function DemoWidget(){
   const [count,setCount]=useState(0)
@@ -12,16 +13,20 @@ export default function DemoWidget(){
     }catch(e){setMsg(String(e))}
   }
   return (
-    <div style={{border:'1px solid #e5e7eb',padding:16,borderRadius:8}}>
-      <div>Count: {count}</div>
-      <div style={{marginTop:8}}>
-        <button onClick={()=>setCount(c=>c+1)} style={{marginRight:8}}>+1</button>
-        <button onClick={()=>setCount(c=>c-1)}>-1</button>
+    <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl">
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-sm text-slate-500 dark:text-slate-300">Demo</div>
+        <div className="text-xs text-slate-400">Preview</div>
       </div>
-      <div style={{marginTop:12}}>
-        <button onClick={callApi}>Call /api/hello</button>
+      <div className="border rounded-md p-3 bg-slate-50 dark:bg-slate-900">
+        <div className="text-lg font-medium mb-2">Count: <span className="text-indigo-600">{count}</span></div>
+        <div className="flex gap-2">
+          <Button size="sm" onClick={()=>setCount(c=>c+1)}>+1</Button>
+          <Button size="sm" onClick={()=>setCount(c=>c-1)}>-1</Button>
+          <Button variant="ghost" size="sm" onClick={callApi}>Call API</Button>
+        </div>
+        {msg && <pre className="mt-3 text-xs text-slate-500 dark:text-slate-300">{msg}</pre>}
       </div>
-      {msg && <pre style={{marginTop:8}}>{msg}</pre>}
     </div>
   )
 }
