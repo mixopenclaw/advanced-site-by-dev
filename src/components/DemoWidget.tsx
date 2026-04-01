@@ -1,34 +1,27 @@
-import { useState } from "react";
+'use client'
+import React, {useState} from 'react'
 
-export default function DemoWidget() {
-  const [count, setCount] = useState(0);
-  const [hello, setHello] = useState<string | null>(null);
-  const fetchHello = async () => {
-    try {
-      const res = await fetch('/api/hello');
-      const json = await res.json();
-      setHello(json.message);
-    } catch (e) {
-      setHello('error');
-    }
-  };
+export default function DemoWidget(){
+  const [count,setCount]=useState(0)
+  const [msg,setMsg]=useState('')
+  async function callApi(){
+    try{
+      const r=await fetch('/api/hello')
+      const j=await r.json()
+      setMsg(j.message||JSON.stringify(j))
+    }catch(e){setMsg(String(e))}
+  }
   return (
-    <div>
-      <div className="mb-4">
-        <div className="text-sm text-slate-700 font-medium">Live Counter</div>
-        <div className="mt-2 flex items-center gap-3">
-          <button onClick={() => setCount(c => c-1)} aria-label="decrement" className="px-3 py-1 bg-white/10 rounded">-</button>
-          <div className="px-4 py-2 bg-white rounded">{count}</div>
-          <button onClick={() => setCount(c => c+1)} aria-label="increment" className="px-3 py-1 bg-white/10 rounded">+</button>
-        </div>
+    <div style={{border:'1px solid #e5e7eb',padding:16,borderRadius:8}}>
+      <div>Count: {count}</div>
+      <div style={{marginTop:8}}>
+        <button onClick={()=>setCount(c=>c+1)} style={{marginRight:8}}>+1</button>
+        <button onClick={()=>setCount(c=>c-1)}>-1</button>
       </div>
-      <div>
-        <div className="text-sm text-slate-700 font-medium">Fetch API</div>
-        <div className="mt-2 flex items-center gap-3">
-          <button onClick={fetchHello} className="px-3 py-2 bg-white/10 rounded">Call /api/hello</button>
-          <div className="text-sm text-slate-700">{hello ?? 'No response yet'}</div>
-        </div>
+      <div style={{marginTop:12}}>
+        <button onClick={callApi}>Call /api/hello</button>
       </div>
+      {msg && <pre style={{marginTop:8}}>{msg}</pre>}
     </div>
-  );
+  )
 }
