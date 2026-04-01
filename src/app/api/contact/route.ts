@@ -1,21 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server'
 
-function validEmail(e: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-}
-
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const { name, email, message } = body || {};
-    if (!name || !message || !email || !validEmail(email)) {
-      return NextResponse.json({ ok: false, error: 'invalid' }, { status: 400 });
-    }
-    // Log server-side
-    // eslint-disable-next-line no-console
-    console.log('[contact]', { name, email, message });
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    return NextResponse.json({ ok: false, error: 'bad_request' }, { status: 400 });
-  }
+export async function POST(req: Request){
+  const data = await req.formData().catch(()=>null) || await req.json().catch(()=>null);
+  const name = data?.get?.('name') || data?.name;
+  const email = data?.get?.('email') || data?.email;
+  const message = data?.get?.('message') || data?.message;
+  if(!name || !email || !message) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+  if(typeof email !== 'string' || !email.includes('@')) return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
+  console.log('Contact (app router) received', { name, email, message });
+  return NextResponse.json({ ok: true });
 }
