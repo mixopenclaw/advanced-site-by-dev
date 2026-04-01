@@ -21,6 +21,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="preload" href="/illustrations/hero-blob.svg" as="image" />
       </head>
       <body className="min-h-full">
         <header className="p-4 flex items-center justify-between">
