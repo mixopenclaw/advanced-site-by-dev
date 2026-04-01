@@ -7,6 +7,7 @@ on:
 jobs:
   playwright:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node
@@ -21,7 +22,21 @@ jobs:
         run: pnpm install
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-      - name: Start app
-        run: pnpm build && pnpm start &
+      - name: Build
+        run: pnpm build
+      - name: Start app (background)
+        run: |
+          pnpm start &>/tmp/next.log &
+          # wait for server to accept connections
+          for i in $(seq 1 60); do
+            if curl -sSf http://localhost:3000/ >/dev/null; then
+              echo "server up"
+              break
+            fi
+            echo "waiting for server... ($i)"
+            sleep 1
+          done
+      - name: Check server logs
+        run: tail -n +1 /tmp/next.log || true
       - name: Run Playwright tests
         run: npx playwright test --reporter=list
