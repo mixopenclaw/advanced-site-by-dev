@@ -6,7 +6,7 @@ test.describe('smoke', () => {
   test('home page shows hero and demo widget', async ({ page }) => {
     const resp = await page.goto(base + '/');
     expect(resp?.status()).toBeLessThan(400);
-    await expect(page.getByText('Pulse — Turn ideas into tiny apps')).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Pulse — Turn ideas into tiny apps/i })).toBeVisible();
     await expect(page.getByText('DemoWidget')).toBeVisible();
   });
 

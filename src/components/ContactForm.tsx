@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import toast from 'react-hot-toast';
+import Toaster from './Toaster';
 
 export default function ContactForm(){
   const [status, setStatus] = useState<'idle'|'sending'|'success'|'error'>('idle');
@@ -6,17 +8,30 @@ export default function ContactForm(){
     e.preventDefault();
     setStatus('sending');
     const form = new FormData(e.target as HTMLFormElement);
-    const res = await fetch('/api/contact', {method:'POST', body: form});
-    if(res.ok) setStatus('success'); else setStatus('error');
+    try{
+      const res = await fetch('/api/contact', {method:'POST', body: form});
+      if(res.ok){
+        setStatus('success');
+        toast.success('Message sent — thanks!');
+      }else{
+        setStatus('error');
+        const json = await res.json().catch(()=>null);
+        toast.error(json?.error || 'Error sending message');
+      }
+    }catch(err){
+      setStatus('error');
+      toast.error('Network error');
+    }
   }
   return (
-    <form onSubmit={handleSubmit} aria-label="Contact form">
-      <label>Full name<input name="name" required /></label>
-      <label>Email<input name="email" type="email" required /></label>
-      <label>Message<textarea name="message" required /></label>
-      <button type="submit" disabled={status==='sending'}>{status==='sending'? 'Sending...':'Send'}</button>
-      {status==='success' && <div role="status">Thanks — we'll be in touch.</div>}
-      {status==='error' && <div role="alert">Error sending message.</div>}
-    </form>
+    <>
+      <Toaster />
+      <form onSubmit={handleSubmit} aria-label="Contact form">
+        <label>Full name<input name="name" required /></label>
+        <label>Email<input name="email" type="email" required /></label>
+        <label>Message<textarea name="message" required /></label>
+        <button type="submit" disabled={status==='sending'}>{status==='sending'? 'Sending...':'Send'}</button>
+      </form>
+    </>
   )
 }
